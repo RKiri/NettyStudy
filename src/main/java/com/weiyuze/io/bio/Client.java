@@ -1,7 +1,6 @@
-package com.mashibing.io.bio;
+package com.weiyuze.io.bio;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 
 public class Client {

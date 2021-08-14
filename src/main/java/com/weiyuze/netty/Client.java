@@ -1,4 +1,4 @@
-package com.mashibing.netty;
+package com.weiyuze.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;

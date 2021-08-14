@@ -1,4 +1,4 @@
-package com.mashibing.io.nio;
+package com.weiyuze.io.nio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
