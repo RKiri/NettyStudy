@@ -1,4 +1,4 @@
-package com.weiyuze.io.nio;
+package com.weiyuze.io_teach.nio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

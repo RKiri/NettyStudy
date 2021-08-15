@@ -1,15 +1,23 @@
-package com.weiyuze.io.aio;
+package com.weiyuze.io_teach.aio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class Server {
+public class ServerWithThreadGroup {
     public static void main(String[] args) throws Exception {
-        final AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open()
+
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        AsynchronousChannelGroup threadGroup = AsynchronousChannelGroup.withCachedThreadPool(executorService, 1);
+
+        //中文测试
+        final AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open(threadGroup)
                 .bind(new InetSocketAddress(8888));
 
         serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
