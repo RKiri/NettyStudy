@@ -13,13 +13,14 @@ import java.util.concurrent.Executors;
 public class ServerWithThreadGroup {
     public static void main(String[] args) throws Exception {
 
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        AsynchronousChannelGroup threadGroup = AsynchronousChannelGroup.withCachedThreadPool(executorService, 1);
+        ExecutorService executorService = Executors.newCachedThreadPool();//线程池
+        AsynchronousChannelGroup threadGroup = AsynchronousChannelGroup.withCachedThreadPool(executorService, 1);//1个
 
         //中文测试
-        final AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open(threadGroup)
+        final AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open(threadGroup)//将threadGroup传入
                 .bind(new InetSocketAddress(8888));
 
+        //其他不变
         serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
             @Override
             public void completed(AsynchronousSocketChannel client, Object attachment) {

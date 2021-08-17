@@ -12,14 +12,16 @@ public class Server {
         final AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open()
                 .bind(new InetSocketAddress(8888));
 
-        serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
+        //异步，不再阻塞
+        serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {//观察者模式 回调、钩子函数，方法交给操作系统
+            //连接上
             @Override
             public void completed(AsynchronousSocketChannel client, Object attachment) {
                 serverChannel.accept(null, this);
                 try {
                     System.out.println(client.getRemoteAddress());
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
-                    client.read(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {
+                    client.read(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {//CompletionHandler 不再阻塞
                         @Override
                         public void completed(Integer result, ByteBuffer attachment) {
                             attachment.flip();
@@ -39,12 +41,14 @@ public class Server {
                 }
             }
 
+            //没有连接上，处理异常
             @Override
             public void failed(Throwable exc, Object attachment) {
                 exc.printStackTrace();
             }
         });
 
+        //latch
         while (true) {
             Thread.sleep(1000);
         }

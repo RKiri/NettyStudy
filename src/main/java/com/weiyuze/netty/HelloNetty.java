@@ -26,14 +26,15 @@ class NettyServer {
     public void serverStart() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        ServerBootstrap b = new ServerBootstrap();
+        ServerBootstrap b = new ServerBootstrap();//Server启动前的一些配置
 
         b.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
+                .channel(NioServerSocketChannel.class)//建立通道的类型
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new Handler());
+                    protected void initChannel(SocketChannel ch) throws Exception {//客户端连接(通道初始化)后，添加监听器进行处理
+                        //通道上添加一个对通道处理(监听)器
+                        ch.pipeline().addLast(new Handler());//在通道的监听器队列最后添加处理(监听)器
                     }
                 });
 
@@ -53,6 +54,8 @@ class NettyServer {
 }
 
 class Handler extends ChannelInboundHandlerAdapter {
+    //当有数据写入时，自动调用
+    //对通道已经读入的数据解析，处理
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //super.channelRead(ctx, msg);
@@ -69,10 +72,11 @@ class Handler extends ChannelInboundHandlerAdapter {
     }
 
 
+    //异常处理
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         //super.exceptionCaught(ctx, cause);
         cause.printStackTrace();
-        ctx.close();
+        ctx.close();//关闭通道
     }
 }

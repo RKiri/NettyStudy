@@ -77,7 +77,7 @@ public class PoolServer {
                 } else if (key.isReadable()) {
                     //
                     key.interestOps(key.interestOps()&(~SelectionKey.OP_READ));
-                    //
+                    //启一个新线程交给线程池处理，线程池里谁空谁来处理
                     pool.execute(new ThreadHandlerChannel(key));
                 }
             }
