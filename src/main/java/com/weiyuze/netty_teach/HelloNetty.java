@@ -1,4 +1,4 @@
-package com.weiyuze.netty;
+package com.weiyuze.netty_teach;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

@@ -1,4 +1,4 @@
-package com.weiyuze.netty;
+package com.weiyuze.netty_teach;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -15,7 +15,7 @@ public class Client {
     }
 
     private void clientStart() {
-        EventLoopGroup workers = new NioEventLoopGroup();
+        EventLoopGroup workers = new NioEventLoopGroup(5);//可写数字，默认1个
         Bootstrap b = new Bootstrap();
         b.group(workers)
                 .channel(NioSocketChannel.class)
@@ -47,6 +47,7 @@ public class Client {
 }
 
 class ClientHandler extends ChannelInboundHandlerAdapter {
+    //建立后写
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel is activated.");
@@ -63,6 +64,7 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 
     }
 
+    //读
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {

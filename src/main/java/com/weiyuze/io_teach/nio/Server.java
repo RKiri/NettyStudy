@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-        ServerSocketChannel ssc = ServerSocketChannel.open();//双向通道 可同时读写
+        ServerSocketChannel ssc = ServerSocketChannel.open();//全双工 双向通道 可同时读写
         ssc.socket().bind(new InetSocketAddress("127.0.0.1", 8888));
         ssc.configureBlocking(false);
 
@@ -20,13 +20,13 @@ public class Server {
         Selector selector = Selector.open();//打开一个selector
         ssc.register(selector, SelectionKey.OP_ACCEPT);//登记 注册对某事感兴趣 客户端连接
 
-        while(true) {
+        while (true) {
             selector.select();//阻塞方法 等到有一件事发生 如ACCEPT
             //ServerSocket有很多插座的面板，每一个面板Selector都会注册自己的key
             //当key有事件发生，放入Set内，对Set进行循环，拿到一个key将其remove，然后对key进行处理
             Set<SelectionKey> keys = selector.selectedKeys();
             Iterator<SelectionKey> it = keys.iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 SelectionKey key = it.next();
                 it.remove();
                 handle(key);
@@ -36,12 +36,12 @@ public class Server {
     }
 
     private static void handle(SelectionKey key) {
-        if(key.isAcceptable()) {//有客户端想要连接
+        if (key.isAcceptable()) {//有客户端想要连接
             try {
                 //bio:ServerSocket,Socket
                 //nio:ServerSocketChannel,SocketChannel
                 ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
-                SocketChannel sc = ssc.accept();
+                SocketChannel sc = ssc.accept();//接受进来，产生一个新的Channel
                 sc.configureBlocking(false);
                 //new Client
                 //
@@ -58,7 +58,7 @@ public class Server {
 				}
 			}*/
 
-                sc.register(key.selector(), SelectionKey.OP_READ );//登记read事件
+                sc.register(key.selector(), SelectionKey.OP_READ);//登记read事件
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -66,12 +66,12 @@ public class Server {
         } else if (key.isReadable()) { //flip
             SocketChannel sc = null;
             try {
-                sc = (SocketChannel)key.channel();
-                ByteBuffer buffer = ByteBuffer.allocate(512);
+                sc = (SocketChannel) key.channel();
+                ByteBuffer buffer = ByteBuffer.allocate(512);//只有一个指针，读写都用
                 buffer.clear();
                 int len = sc.read(buffer);
 
-                if(len != -1) {
+                if (len != -1) {
                     System.out.println(new String(buffer.array(), 0, len));
                 }
 
@@ -80,7 +80,7 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if(sc != null) {
+                if (sc != null) {
                     try {
                         sc.close();
                     } catch (IOException e) {

@@ -13,13 +13,13 @@ public class Server {
                 .bind(new InetSocketAddress(8888));
 
         //异步，不再阻塞
-        serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {//观察者模式 回调、钩子函数，方法交给操作系统
+        serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {//观察者模式 回调、钩子函数，模板方法 方法交给操作系统
             //连接上
             @Override
             public void completed(AsynchronousSocketChannel client, Object attachment) {
                 serverChannel.accept(null, this);
                 try {
-                    System.out.println(client.getRemoteAddress());
+                    System.out.println(client.getRemoteAddress());//返回此通道套接字连接到的远程地址。
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
                     client.read(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {//CompletionHandler 不再阻塞
                         @Override
